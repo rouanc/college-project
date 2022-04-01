@@ -1,0 +1,28 @@
+.card {
+  position: absolute;
+  font-family: "Open Sans", sans-serif;
+  background: rgba(255, 255, 255, 0.4);
+  bottom: 65.5%;
+  width: 20em;
+  height: 190px;
+  z-index: 100;
+  padding: 0.9em;
+  border-radius: 15px;
+  color: #1f1d1d;
+}
+
+.font-size{
+  font-size: xx-small;
+}
+.AQI {
+  position: absolute;
+  font-family: "Open Sans", sans-serif;
+  background: rgba(255, 255, 255, 0.4);
+  bottom: 49.7%;
+  width: 20em;
+  height: 120px;
+  z-index: 100;
+  padding: 0.9em;
+  border-radius: 15px;
+  color: #1f1d1d;
+}
