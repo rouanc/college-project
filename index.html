@@ -64,15 +64,57 @@
           </select>
         </div>
         <div class="col-3">
-          <button type="button" class="btn btn-light rounded-pill px-3">
+          <a
+            href="./cloudy-day.png"
+            download="./cloudy-day.png"
+            type="button"
+            class="btn btn-light rounded-pill px-3"
+          >
             資料下載
-          </button>
+          </a>
           <button type="button" class="btn btn-light rounded-pill px-3">
             資料索引
           </button>
-          <button type="button" class="btn btn-light rounded-pill px-3">
+          <button
+            type="button"
+            class="btn btn-light rounded-pill px-3"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+          >
             系統介紹
           </button>
+          <!-- Modal -->
+          <div
+            class="modal fade"
+            id="exampleModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">系統介紹</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">哈囉你好嗎？ 衷心感謝 期待再相逢～</div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -104,12 +146,11 @@
       </div>
       <hr class="mb-1" style="width: 99%; min-height: 2px; color: black" />
       <div class="text-end fw-bolder font-size">資料來源：中央氣象局</div>
-    </div>
 
-    <!--AQI card-->
-    <div class="AQI">
-      <h4 class="d-inline me-2">空氣品質指標AQI</h4>
-      <h1 class="d-inline my-3">36</h1>
+      <div>
+        <h4 class="d-inline me-2">空氣品質指標AQI</h4>
+        <h1 class="d-inline my-3">36</h1>
+      </div>
       <hr class="mb-1" style="width: 99%; min-height: 2px; color: black" />
       <div class="text-end fw-bolder font-size">資料來源：空氣品質監測網</div>
     </div>
