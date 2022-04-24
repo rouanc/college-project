@@ -1,5 +1,13 @@
 Cesium.Ion.defaultAccessToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4N2RkY2M3Ny00MTA2LTRmNjMtYjBkNS04NDdhNmVlMTBmZDQiLCJpZCI6NDcyNzcsImlhdCI6MTYxNzAzMTkzNn0.nQKrfRXx4K7qz8_FWBnS7EfE7Uj8Jhm49ReO508KGrc"
+// Create a clock that loops on Christmas day 2013 and runs in real-time.
+const clock = new Cesium.Clock({
+  startTime: Cesium.JulianDate.fromIso8601("2022-06-21"),
+  currentTime: Cesium.JulianDate.fromIso8601("2022-06-21"),
+  stopTime: Cesium.JulianDate.fromIso8601("2022-06-22"),
+  clockRange: Cesium.ClockRange.LOOP_STOP,
+  clockStep: Cesium.ClockStep.SYSTEM_CLOCK_MULTIPLIER,
+})
 
 const viewer = new Cesium.Viewer("cesiumContainer", {
   baseLayerPicker: true,
@@ -11,6 +19,7 @@ const viewer = new Cesium.Viewer("cesiumContainer", {
   showOutline: true,
   timeline: true,
   sceneModePicker: true,
+  clockViewModel: new Cesium.ClockViewModel(clock),
 })
 //處理選單字串
 function loadArea(select) {
