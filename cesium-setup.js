@@ -1,10 +1,14 @@
 Cesium.Ion.defaultAccessToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4N2RkY2M3Ny00MTA2LTRmNjMtYjBkNS04NDdhNmVlMTBmZDQiLCJpZCI6NDcyNzcsImlhdCI6MTYxNzAzMTkzNn0.nQKrfRXx4K7qz8_FWBnS7EfE7Uj8Jhm49ReO508KGrc"
 // Create a clock that loops on Christmas day 2013 and runs in real-time.
+const startHour = 17
+const initTime = new Date("2022-06-21T06:00:00.000+08:00")
+initTime.setHours(startHour)
+const endTime = new Date("2022-06-21T18:59:59.999+08:00")
 const clock = new Cesium.Clock({
-  startTime: Cesium.JulianDate.fromIso8601("2022-06-21"),
-  currentTime: Cesium.JulianDate.fromIso8601("2022-06-21"),
-  stopTime: Cesium.JulianDate.fromIso8601("2022-06-22"),
+  startTime: Cesium.JulianDate.fromDate(initTime),
+  currentTime: Cesium.JulianDate.fromDate(initTime),
+  stopTime: Cesium.JulianDate.fromDate(endTime),
   clockRange: Cesium.ClockRange.LOOP_STOP,
   clockStep: Cesium.ClockStep.SYSTEM_CLOCK_MULTIPLIER,
 })
@@ -20,63 +24,120 @@ const viewer = new Cesium.Viewer("cesiumContainer", {
   timeline: true,
   sceneModePicker: true,
   clockViewModel: new Cesium.ClockViewModel(clock),
+  infoBox: false,
 })
+// 修改時間條顯示文字
+viewer.animation.viewModel.timeFormatter = function (date, viewModel) {
+  date = Cesium.JulianDate.toDate(date)
+  return date.toLocaleTimeString()
+}
+//讀取檔案並上色
+const tileset = new Cesium.Cesium3DTileset({
+  name: "taichung",
+  url: "./taichung_17_18/tileset.json",
+})
+
+viewer.scene.primitives.add(tileset)
+
+viewer.flyTo(tileset)
+tileset.style = new Cesium.Cesium3DTileStyle({
+  show: "${floor}>=0",
+  color: {
+    conditions: [
+      // ["${floor} >= 40", "rgb(26,152,80)"],
+      // ["${floor} >= 30", "rgb(102,189,99)"],
+      // ["${floor} >= 25", "rgb(166,217,106)"],
+      // ["${floor} >= 20", "rgb(217,239,139)"],
+      // ["${floor} >= 15", "rgb(254,224,139)"],
+      // ["${floor} >= 10", "rgb(253,174,97)"],
+      // ["${floor} >= 5", "rgb(245,92,0)"],
+      ["true", "rgb(53, 255, 255)"],
+    ],
+  },
+})
+
+const infoboxModal = new bootstrap.Modal(document.getElementById("infobox"))
+
+//handler處理時段與對應的cover值
+const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas)
+handler.setInputAction(function (movement) {
+  const feature = viewer.scene.pick(movement.position)
+  if (feature instanceof Cesium.Cesium3DTileFeature) {
+    const propertyNames = feature.getPropertyNames()
+    const length = propertyNames.length
+    let txt = ""
+    const currentTime = Cesium.JulianDate.toDate(viewer.clock.currentTime)
+    const currentHour = currentTime.getHours()
+    console.log(currentTime.toLocaleTimeString())
+    for (let i = 0; i < length; ++i) {
+      const propertyName = propertyNames[i]
+      if (propertyName === "cover") {
+        const idx = currentHour - startHour
+        const covers = feature.getProperty(propertyName)
+        txt += propertyName + ": " + covers.split(",")[idx]
+      } else {
+        txt += propertyName + ": " + feature.getProperty(propertyName)
+      }
+      txt += "</br>"
+    }
+    const body = document.getElementById("infobox-body")
+    body.innerHTML = txt
+    infoboxModal.show()
+  }
+}, Cesium.ScreenSpaceEventType.LEFT_CLICK)
+
 //處理選單字串
 function loadArea(select) {
   console.log(select.value)
-  let path
+  let path, lat, lng
   switch (select.value) {
     case "All":
-      path = "./3Dtiles/taichung_4326/tileset.json"
+      path = "./taichung_18/tileset.json"
       break
     case "central":
-      path = "./3Dtiles/central/tileset.json"
+      lat = 24.142506694290326
+      lng = 120.67934732732488
       break
     case "east":
-      path = "./3Dtiles/east/tileset.json"
+      lat = 24.139564335954976
+      lng = 120.69270283742098
       break
     case "south":
-      path = "./3Dtiles/south/tileset.json"
+      lat = 24.126545542811687
+      lng = 120.67533889279427
       break
     case "west":
-      path = "./3Dtiles/west/tileset.json"
+      lat = 24.148477407619062
+      lng = 120.66203458377554
       break
     case "north":
-      path = "./3Dtiles/north/tileset.json"
+      lat = 24.1580380787749
+      lng = 120.682205652313
       break
     case "xitun":
-      path = "./3Dtiles/xitun/tileset.json"
+      lat = 24.17734393274862
+      lng = 120.63963270263578
       break
     case "nantun":
-      path = "./3Dtiles/nantun/tileset.json"
+      lat = 24.147236398190497
+      lng = 120.60973982121092
       break
     case "beitun":
-      path = "./3Dtiles/beitun/tileset.json"
+      lat = 24.17890027340992
+      lng = 120.68855027885152
       break
     default:
       break
   }
-
-  const tileset = new Cesium.Cesium3DTileset({
-    name: "taichung",
-    url: path,
-  })
-
-  viewer.scene.primitives.add(tileset)
-  viewer.flyTo(tileset)
-  tileset.style = new Cesium.Cesium3DTileStyle({
-    show: "${floors}>=0",
-    color: {
-      conditions: [
-        ["${floors} >= 40", "rgb(26,152,80)"],
-        ["${floors} >= 30", "rgb(102,189,99)"],
-        ["${floors} >= 25", "rgb(166,217,106)"],
-        ["${floors} >= 20", "rgb(217,239,139)"],
-        ["${floors} >= 15", "rgb(254,224,139)"],
-        ["${floors} >= 10", "rgb(253,174,97)"],
-        ["${floors} >= 5", "rgb(245,92,0)"],
-        ["true", "rgba(255,97,85,0.5)"],
-      ],
-    },
-  })
+  if (lat && lng) {
+    viewer.camera.flyTo({
+      destination: Cesium.Cartesian3.fromDegrees(lng, lat - 0.01, 600),
+      orientation: {
+        heading: Cesium.Math.toRadians(0.0),
+        pitch: Cesium.Math.toRadians(-25.0),
+      },
+    })
+  } else {
+    viewer.flyTo(tileset)
+  }
 }
