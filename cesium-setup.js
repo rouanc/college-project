@@ -71,7 +71,7 @@ handler.setInputAction(function (movement) {
     console.log(currentTime.toLocaleTimeString())
     for (let i = 0; i < length; ++i) {
       const propertyName = propertyNames[i]
-      if (propertyName === "cover") {
+      if (propertyName === "sun_cover") {
         const idx = currentHour - startHour
         const covers = feature.getProperty(propertyName)
         txt += propertyName + ": " + covers.split(",")[idx]
@@ -92,7 +92,7 @@ function loadArea(select) {
   let path, lat, lng
   switch (select.value) {
     case "All":
-      path = "./taichung_18/tileset.json"
+      path = "./taichung_17_18/tileset.json"
       break
     case "central":
       lat = 24.142506694290326

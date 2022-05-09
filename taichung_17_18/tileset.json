@@ -12,7 +12,7 @@
 			"minimum" : 0,
 			"maximum" : 50
 		},
-		"area" : {
+		"shadow" : {
 			"minimum" : 0,
 			"maximum" : 4012.56650855
 		},
@@ -20,7 +20,7 @@
 			"minimum" : 0.00026394,
 			"maximum" : 63448.7871168
 		},
-		"cover" : {}
+		"sun_cover" : {}
 	},
 	"geometricError" : 473.0613045414487,
 	"root" : {
