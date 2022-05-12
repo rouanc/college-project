@@ -1,7 +1,7 @@
 Cesium.Ion.defaultAccessToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4N2RkY2M3Ny00MTA2LTRmNjMtYjBkNS04NDdhNmVlMTBmZDQiLCJpZCI6NDcyNzcsImlhdCI6MTYxNzAzMTkzNn0.nQKrfRXx4K7qz8_FWBnS7EfE7Uj8Jhm49ReO508KGrc"
 // Create a clock that loops on Christmas day 2013 and runs in real-time.
-const startHour = 17
+const startHour = 06
 const initTime = new Date("2022-06-21T06:00:00.000+08:00")
 initTime.setHours(startHour)
 const endTime = new Date("2022-06-21T18:59:59.999+08:00")
@@ -34,7 +34,7 @@ viewer.animation.viewModel.timeFormatter = function (date, viewModel) {
 //讀取檔案並上色
 const tileset = new Cesium.Cesium3DTileset({
   name: "taichung",
-  url: "./taichung_17_18/tileset.json",
+  url: "./tileset/tileset.json",
 })
 
 viewer.scene.primitives.add(tileset)
@@ -44,13 +44,13 @@ tileset.style = new Cesium.Cesium3DTileStyle({
   show: "${floor}>=0",
   color: {
     conditions: [
-      // ["${floor} >= 40", "rgb(26,152,80)"],
-      // ["${floor} >= 30", "rgb(102,189,99)"],
-      // ["${floor} >= 25", "rgb(166,217,106)"],
-      // ["${floor} >= 20", "rgb(217,239,139)"],
-      // ["${floor} >= 15", "rgb(254,224,139)"],
-      // ["${floor} >= 10", "rgb(253,174,97)"],
-      // ["${floor} >= 5", "rgb(245,92,0)"],
+      // ["${cover} >= 90%", "rgb(26,152,80)"],
+      // ["${cover} >= 80%", "rgb(102,189,99)"],
+      // ["${cover} >= 70%", "rgb(166,217,106)"],
+      // ["${cover} >= 60%", "rgb(217,239,139)"],
+      // ["${cover} >= 50%", "rgb(254,224,139)"],
+      // ["${cover} >= 40%", "rgb(253,174,97)"],
+      // ["${cover} >= 20%", "rgb(245,92,0)"],
       ["true", "rgb(53, 255, 255)"],
     ],
   },
@@ -71,7 +71,7 @@ handler.setInputAction(function (movement) {
     console.log(currentTime.toLocaleTimeString())
     for (let i = 0; i < length; ++i) {
       const propertyName = propertyNames[i]
-      if (propertyName === "sun_cover") {
+      if (propertyName === "cover") {
         const idx = currentHour - startHour
         const covers = feature.getProperty(propertyName)
         txt += propertyName + ": " + covers.split(",")[idx]
@@ -92,7 +92,7 @@ function loadArea(select) {
   let path, lat, lng
   switch (select.value) {
     case "All":
-      path = "./taichung_17_18/tileset.json"
+      path = "./tileset/tileset.json"
       break
     case "central":
       lat = 24.142506694290326
